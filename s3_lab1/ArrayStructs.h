@@ -12,30 +12,28 @@ namespace array
 	{
 		T* array;
 		int capacity;
-		int head_idx;
 		int tail_idx;
 		List()
 		{
 			this->capacity = GLOBAL_CONST_ARR_SIZE;
-			this->head_idx = 0;
-			this->tail_idx = 0;
-			this->array = new T;
+			this->tail_idx = -1;
+			this->array = new T[GLOBAL_CONST_ARR_SIZE];
 		}
 		~List()
 		{
 			delete[] array;
 		}
-		void changeCapacity(int var)
+		/*void changeCapacity(int var)
 		{
 			this->capacity = var;
-		}
+		}*/
 		bool empty()
 		{
-			return (this->tail_idx == 0);
+			return (this->tail_idx == -1);
 		}
 		void print()
 		{
-			for (int i = 0; i < this->capacity; i++)
+			for (int i = 0; i <= this->tail_idx; i++)
 				std::cout << this->array[i] << " ";
 			std::cout << "\n\n";
 		}
@@ -73,13 +71,14 @@ namespace array
 		{
 			if (this->empty())
 			{
-				std::cout << "This struct is empty\n\n";
+				std::cout << "Underflow\n\n";
 				std::exit(1);
 			}
 
 			else
 			{
-				this->array[this->tail_idx] = this->array[this->tail_idx-1];
+				if(this->tail_idx != 0)
+					this->array[this->tail_idx] = this->array[this->tail_idx-1];
 				this->tail_idx--;
 			}
 		}
