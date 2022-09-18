@@ -73,7 +73,7 @@ namespace linked
 
 	template <class T>
 	struct Stack: 
-		List<T>
+		virtual List<T>
 	{
 		T top()
 		{
@@ -109,7 +109,7 @@ namespace linked
 
 	template <class T>
 	struct Queue: 
-		List<T>
+		virtual List<T>
 	{
 		T back()
 		{

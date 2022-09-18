@@ -1,17 +1,18 @@
-#include "ch1_3.h"
+#include "LinkedStructs.h"
 
 #include <iostream>
 
 int main()
 {
-    linked::Stack<int> stack;
-    std::cout << stack.empty() << "\n\n";
-    stack.pushFront(1);
-    stack.pushFront(3);
-    stack.print();
-    stack.popFront();
-    stack.print();
-    stack.popFront();
-    stack.print();
+    linked::Deque<int> linked_deque;
+    std::cout << linked_deque.empty() << "\n\n";
+    linked_deque.popFront();
+    linked_deque.pushFront(2);
+    linked_deque.pushFront(3);
+    linked_deque.print();
+    linked_deque.popFront();
+    linked_deque.print();
+    linked_deque.popFront();
+    linked_deque.print();
 }
 
