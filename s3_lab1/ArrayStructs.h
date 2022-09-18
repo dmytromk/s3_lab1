@@ -46,7 +46,7 @@ namespace array
 		void pushFront(T add)
 		{
 			if (this->overflow())
-				std::cout << "OVERFLOWING\n\n";
+				std::cout << "Overflow\n\n";
 			else
 			{
 				this->tail_idx++;
@@ -66,22 +66,21 @@ namespace array
 			else
 			{
 				std::cout << "This structure is empty.\n\n";
-				return NULL;
+				std::exit(1);
 			}
 		}
-		T popFront()
+		void popFront()
 		{
 			if (this->empty())
 			{
 				std::cout << "This struct is empty\n\n";
-				return NULL;
+				std::exit(1);
 			}
 
 			else
 			{
-				T result = this->array[this->tail_idx];
+				this->array[this->tail_idx] = this->array[this->tail_idx-1];
 				this->tail_idx--;
-				return result;
 			}
 		}
 	};
@@ -97,22 +96,20 @@ namespace array
 			else
 			{
 				std::cout << "This structure is empty.\n\n";
-				return nullptr;
+				std::exit(1);
 			}
 		}
-		T popBack()
+		void popBack()
 		{
 			if (this->empty())
 			{
 				std::cout << "This struct is empty\n\n";
-				return nullptr;
+				std::exit(1);
 			}
 
-			T result = this->array[0];
 			for (int i = 0; i < this->tail_idx; i++)
 				this->array[i] = this->array[i + 1];
 			this->tail_idx--;
-			return result;
 		}
 	};
 
@@ -123,7 +120,7 @@ namespace array
 		void pushBack(T add)
 		{
 			if (this->overflow())
-				std::cout << "OVERFLOWING\n\n";
+				std::cout << "Overflow\n\n";
 
 			for (int i = this->tail_idx + 1; i > 0; i--)
 				this->array[i] = this->array[i - 1];

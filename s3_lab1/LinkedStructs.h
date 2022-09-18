@@ -77,24 +77,30 @@ namespace linked
 	{
 		T top()
 		{
-			if (!this->empty()) return this->tail->value;
+			if (!this->empty()) 
+				return this->tail->value;
 			else
 			{
-				std::cout << "This queue is empty.\n\n";
-				return nullptr;
+				std::cout << "Underflow.\n\n";
+				std::exit(1);
 			}
+
 		}
-		T popFront()
+		void popFront()
 		{
+			if (this->empty())
+			{
+				std::cout << "Underflow.\n\n";
+				std::exit(1);
+			}
+
 			Node<T>* temp = this->tail;
-			T result = temp->value;
 
 			if (this->tail == this->head)
 			{
 				this->tail = nullptr;
 				this->head = nullptr;
 				delete temp;
-				return result;
 			}
 
 			else
@@ -102,7 +108,6 @@ namespace linked
 				this->tail = this->tail->prev;
 				this->tail->next = nullptr;
 				delete temp;
-				return result;
 			}
 		}
 	};
@@ -114,23 +119,27 @@ namespace linked
 		T back()
 		{
 			if (!this->empty()) return this->head->value;
-			else
+			else 
 			{
-				std::cout << "This queue is empty.\n\n";
-				return nullptr;
+				std::cout << "Underflow.\n\n";
+				std::exit(1);
 			}
 		}
-		T popBack()
+		void popBack()
 		{
+			if (this->empty())
+			{
+				std::cout << "Underflow.\n\n";
+				std::exit(1);
+			}
+
 			Node<T>* temp = this->head;
-			T result = this->head->value;
 
 			if (this->head == this->tail)
 			{
 				this->tail = nullptr;
 				this->head = nullptr;
 				delete temp;
-				return result;
 			}
 
 			else
@@ -138,7 +147,6 @@ namespace linked
 				this->head = this->head->next;
 				this->head->prev = nullptr;
 				delete temp;
-				return result;
 			}
 		}
 	};

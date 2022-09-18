@@ -1,5 +1,7 @@
 #include "LinkedStructs.h"
 
+#include <stack>
+
 #include <iostream>
 
 int main()
