@@ -23,10 +23,6 @@ namespace array
 		{
 			delete[] array;
 		}
-		/*void changeCapacity(int var)
-		{
-			this->capacity = var;
-		}*/
 		bool empty()
 		{
 			return (this->tail_idx == -1);
@@ -41,7 +37,7 @@ namespace array
 		{
 			return (this->tail_idx == this->capacity - 1);
 		}
-		void pushFront(T add)
+		void pushBack(T add)
 		{
 			if (this->overflow())
 				std::cout << "Overflow\n\n";
@@ -58,7 +54,7 @@ namespace array
 		virtual List<T>
 	{
 		using List<T>::List;
-		T top()
+		T back()
 		{
 			if (!this->empty()) return this->array[this->tail_idx];
 			else
@@ -67,7 +63,7 @@ namespace array
 				std::exit(1);
 			}
 		}
-		void popFront()
+		void popBack()
 		{
 			if (this->empty())
 			{
@@ -89,7 +85,7 @@ namespace array
 		virtual List<T>
 	{
 		using List<T>::List;
-		T back()
+		T top()
 		{
 			if (!this->empty()) return this->array[0];
 			else
@@ -98,7 +94,7 @@ namespace array
 				std::exit(1);
 			}
 		}
-		void popBack()
+		void popTop()
 		{
 			if (this->empty())
 			{
@@ -116,7 +112,7 @@ namespace array
 	struct Deque :
 		Stack<T>, Queue<T>
 	{
-		void pushBack(T add)
+		void pushTop(T add)
 		{
 			if (this->overflow())
 				std::cout << "Overflow\n\n";

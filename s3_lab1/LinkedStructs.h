@@ -54,7 +54,7 @@ namespace linked
 			}
 			std::cout << "\n\n";
 		}
-		void pushFront(T add)
+		void pushBack(T add)
 		{
 			Node<T>* to_add = new Node<T>(add);
 			if (this->head == nullptr)
@@ -75,7 +75,7 @@ namespace linked
 	struct Stack: 
 		virtual List<T>
 	{
-		T top()
+		T back()
 		{
 			if (!this->empty()) 
 				return this->tail->value;
@@ -86,7 +86,7 @@ namespace linked
 			}
 
 		}
-		void popFront()
+		void popBack()
 		{
 			if (this->empty())
 			{
@@ -116,7 +116,7 @@ namespace linked
 	struct Queue: 
 		virtual List<T>
 	{
-		T back()
+		T top()
 		{
 			if (!this->empty()) return this->head->value;
 			else 
@@ -125,7 +125,7 @@ namespace linked
 				std::exit(1);
 			}
 		}
-		void popBack()
+		void popTop()
 		{
 			if (this->empty())
 			{
@@ -155,7 +155,7 @@ namespace linked
 	struct Deque: 
 		Stack<T>, Queue<T>
 	{
-		void pushBack(T add)
+		void pushTop(T add)
 		{
 			Node<T>* to_add = new Node<T>(add);
 			if (this->head == nullptr)
