@@ -2,6 +2,8 @@
 #include "ArrayStructs.h"
 #include "VectorStructs.h"
 
+#include "Trees.h"
+
 #include <stack>
 
 #include <iostream>
@@ -29,5 +31,13 @@ int main()
     linked_deque.print();
     linked_deque.pushTop(5);
     linked_deque.print();
+
+    std::cout << "/////////////////////////////////////////////\n\n";
+
+    tree::MultTree<int> lol;
+    lol.add(lol.head, 10);
+    lol.add(lol.head, 12);
+    lol.print(lol.head);
+    lol.print(lol.head);
 }
 

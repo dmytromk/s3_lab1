@@ -23,6 +23,10 @@ namespace array
 		{
 			delete[] array;
 		}
+		int size()
+		{
+			return tail_idx + 1;
+		}
 		bool empty()
 		{
 			return (this->tail_idx == -1);
@@ -40,12 +44,13 @@ namespace array
 		void pushBack(T add)
 		{
 			if (this->overflow())
-				std::cout << "Overflow\n\n";
-			else
 			{
-				this->tail_idx++;
-				this->array[tail_idx] = add;
+				std::cout << "Overflow\n\n";
+				return;
 			}
+
+			this->tail_idx++;
+			this->array[tail_idx] = add;
 		}
 	};
 
@@ -115,7 +120,10 @@ namespace array
 		void pushTop(T add)
 		{
 			if (this->overflow())
+			{
 				std::cout << "Overflow\n\n";
+				return;
+			}
 
 			for (int i = this->tail_idx + 1; i > 0; i--)
 				this->array[i] = this->array[i - 1];

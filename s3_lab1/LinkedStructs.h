@@ -21,10 +21,12 @@ namespace linked
 	template <class T>
 	struct List
 	{
+		int iSize;
 		Node<T>* head;
 		Node<T>* tail;
 		List()
 		{
+			this->iSize = 0;
 			this->head = nullptr;
 			this->tail = nullptr;
 		}
@@ -39,6 +41,10 @@ namespace linked
 			}
 			this->head = nullptr;
 			this->tail = nullptr;
+		}
+		int size()
+		{
+			return this->iSize;
 		}
 		bool empty()
 		{
@@ -68,6 +74,7 @@ namespace linked
 				this->tail->next = to_add;
 				this->tail = to_add;
 			}
+			this->iSize++;
 		}
 	};
 
@@ -109,6 +116,7 @@ namespace linked
 				this->tail->next = nullptr;
 				delete temp;
 			}
+			this->iSize--;
 		}
 	};
 
@@ -148,6 +156,8 @@ namespace linked
 				this->head->prev = nullptr;
 				delete temp;
 			}
+
+			this->iSize--;
 		}
 	};
 
@@ -169,6 +179,8 @@ namespace linked
 				this->head->prev = to_add;
 				this->head = to_add;
 			}
+
+			this->iSize++;
 		}
 	};
 }

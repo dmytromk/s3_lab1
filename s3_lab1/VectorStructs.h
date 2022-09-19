@@ -13,17 +13,18 @@ namespace vectorized
 		{
 			this->vect = {};
 		}
-
 		~List()
 		{
 			this->vect.clear();
 		}
-
 		bool empty()
 		{
 			return (this->vect.empty());
 		}
-
+		int size()
+		{
+			return this->vect.size();
+		}
 		void print()
 		{
 			for (auto i: this->vect)
