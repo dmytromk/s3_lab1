@@ -10,10 +10,14 @@ namespace tree
 	struct MultNode
 	{
 		T key;
-		std::vector<MultNode*> child;
+		std::vector<MultNode<T>*> child;
 		MultNode(T key)
 		{
 			this->key = key;
+		}
+		int size()
+		{
+			return this->child.size();
 		}
 	};
 
@@ -34,20 +38,66 @@ namespace tree
 				root->child.push_back(to_add);
 			return;
 		}
-		MultNode<T>* searchDFS(MultNode<T>* root, T key)
+		MultNode<T>* searchNLR(MultNode<T>* root, T key)
 		{
 			if (root == nullptr) return nullptr;
 			else if (root->key == key) return root;
 
 			else
 			{
-				for (MultNode<T>* iter : root->child)
+				for (auto iter : root->child)
 				{
-					MultNode<T>* temp = searchDFS(iter, key);
-					if (temp->key == key) return temp;
+					MultNode<T>* temp = searchNLR(iter, key);
+					if (temp == nullptr) 
+						continue;
+					else if (temp->key == key) 
+						return temp;
 				}
 				return nullptr;
 			}
+		}
+		MultNode<T>* searchNRL(MultNode<T>* root, T key)
+		{
+			if (root == nullptr) return nullptr;
+			else if (root->key == key) return root;
+
+			else
+			{
+				for (auto iter = root->size()-1; iter >= 0; iter -= 1)
+				{
+					MultNode<T>* temp = searchNRL(iter, key);
+					if (temp == nullptr)
+						continue;
+					else if (temp->key == key)
+						return temp;
+				}
+				return nullptr;
+			}
+		}
+		MultNode<T>* searchBFS(MultNode<T>* root, T key)
+		{
+			std::vector<MultNode<T>*> result;
+			if (root == nullptr) return nullptr;
+
+			linked::Queue<MultNode<T>*> q;
+			q.pushBack(root);
+
+			while (!q.empty())
+			{
+				MultNode<T>* iter = q.top();
+				q.popTop();
+				if (iter->key == key)
+					return iter;
+
+				for (auto temp : iter->child)
+				{
+					if (temp->key == key)
+						return temp;
+					else
+						q.pushBack(temp);
+				}
+			}
+			return nullptr;
 		}
 		void deleteRecurs(MultNode<T>* root)
 		{
