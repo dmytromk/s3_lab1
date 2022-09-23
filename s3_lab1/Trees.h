@@ -10,14 +10,14 @@ namespace tree
 	struct MultNode
 	{
 		T key;
-		std::vector<MultNode<T>*> child;
+		std::vector<MultNode<T>*> children;
 		MultNode(T key)
 		{
 			this->key = key;
 		}
 		int size()
 		{
-			return this->child.size();
+			return this->children.size();
 		}
 	};
 
@@ -35,47 +35,127 @@ namespace tree
 			if (root == nullptr) 
 				this->head = to_add;
 			else
-				root->child.push_back(to_add);
+				root->children.push_back(to_add);
 			return;
 		}
-		MultNode<T>* searchNLR(MultNode<T>* root, T key)
+		MultNode<T>* searchPreOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+			//Pre-order
 		{
 			if (root == nullptr) return nullptr;
 			else if (root->key == key) return root;
 
+			int from, to, step;
+
+			if (!reversal_flag)
+			{
+				//Node-Left-Right
+				//None-Reverse
+				from = 0;
+				to = root->size() - 1;
+				step = 1;
+			}
 			else
 			{
-				for (auto iter : root->child)
-				{
-					MultNode<T>* temp = searchNLR(iter, key);
-					if (temp == nullptr) 
-						continue;
-					else if (temp->key == key) 
-						return temp;
-				}
-				return nullptr;
+				//Node-Right-Left
+				//Reverse
+				from = root->size() - 1;
+				to = 0;
+				step = -1;
 			}
+
+			for (from; from != to; from += step)
+					{
+						MultNode<T>* temp = searchPreOrder(root->children[from], key);
+						if (temp == nullptr)
+							continue;
+						else if (temp->key == key)
+							return temp;
+					}		
+			return nullptr;
 		}
-		MultNode<T>* searchNRL(MultNode<T>* root, T key)
+		MultNode<T>* searchPostOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+			//Post-order
 		{
 			if (root == nullptr) return nullptr;
-			else if (root->key == key) return root;
 
+			int from, to, step;
+
+			if (!reversal_flag)
+			{
+				//Left-Right-Node
+				//None-Reverse
+				from = 0;
+				to = root->size() - 1;
+				step = 1;
+			}
 			else
 			{
-				for (auto iter = root->size()-1; iter >= 0; iter -= 1)
-				{
-					MultNode<T>* temp = searchNRL(iter, key);
-					if (temp == nullptr)
-						continue;
-					else if (temp->key == key)
-						return temp;
-				}
-				return nullptr;
+				//Right-Left-Node
+				//Reverse
+				from = root->size() - 1;
+				to = 0;
+				step = -1;
 			}
+
+			for (from; from != to; from += step)
+			{
+				MultNode<T>* temp = searchPostOrder(root->children[from], key);
+				if (temp == nullptr)
+					continue;
+				else if (temp->key == key)
+					return temp;
+			}
+
+			if (root->key == key) return root;
+
+			return nullptr;
 		}
-		MultNode<T>* searchBFS(MultNode<T>* root, T key)
+		MultNode<T>* searchInOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+			//In-order
 		{
+			if (root == nullptr) return nullptr;
+
+			int from, to, step;
+
+			if (!reversal_flag)
+			{
+				//Left-Node-Right
+				//None-Reverse
+				from = 0;
+				to = root->size() - 2; //Every node except the last one
+				step = 1;
+			}
+			else
+			{
+				//Right-Node-Left
+				//Reverse
+				from = root->size() - 1;
+				to = 1; //Every node except the first one
+				step = -1;
+			}
+
+			for (from; from != to; from += step)
+			{
+				MultNode<T>* temp = searchInOrder(root->children[from], key);
+				if (temp == nullptr)
+					continue;
+				else if (temp->key == key)
+					return temp;
+			}
+
+			if (root->key == key) return root;
+
+			if (!reversal_flag) to++; //Check the last node
+			else to--; //Check the first node
+
+			MultNode<T>* temp = searchInOrder(root->children[to], key);
+
+			return temp;
+		}
+		MultNode<T>* searchBreadthFirst(MultNode<T>* root, T key)
+		{
+			//breadth-first search
+
 			std::vector<MultNode<T>*> result;
 			if (root == nullptr) return nullptr;
 
@@ -89,7 +169,7 @@ namespace tree
 				if (iter->key == key)
 					return iter;
 
-				for (auto temp : iter->child)
+				for (auto temp : iter->children)
 				{
 					if (temp->key == key)
 						return temp;
@@ -104,7 +184,7 @@ namespace tree
 			if (root == nullptr)
 				return;
 
-			for (MultNode<T>* iter : root->child)
+			for (MultNode<T>* iter : root->children)
 				deleteRecurs(iter);
 
 			delete root;
@@ -112,7 +192,7 @@ namespace tree
 		}
 		void deleteNodeIdx(MultNode<T>* root, int idx)
 		{
-			deleteRecurs(root->child[idx]);
+			deleteRecurs(root->children[idx]);
 		}
 		void deleteNodeKey(T key)
 		{
@@ -136,8 +216,8 @@ namespace tree
 					queue.popTop();
 					std::cout << p->key << " ";
 
-					for (int i = 0; i < p->child.size(); i++)
-						queue.pushBack(p->child[i]);
+					for (int i = 0; i < p->children.size(); i++)
+						queue.pushBack(p->children[i]);
 					n--;
 				}
 
