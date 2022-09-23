@@ -51,15 +51,15 @@ namespace tree
 				//Node-Left-Right
 				//None-Reverse
 				from = 0;
-				to = root->size() - 1;
+				to = root->children.size();
 				step = 1;
 			}
 			else
 			{
 				//Node-Right-Left
 				//Reverse
-				from = root->size() - 1;
-				to = 0;
+				from = root->children.size()-1;
+				to = -1;
 				step = -1;
 			}
 
@@ -85,15 +85,15 @@ namespace tree
 				//Left-Right-Node
 				//None-Reverse
 				from = 0;
-				to = root->size() - 1;
+				to = root->children.size();
 				step = 1;
 			}
 			else
 			{
 				//Right-Left-Node
 				//Reverse
-				from = root->size() - 1;
-				to = 0;
+				from = root->children.size()-1;
+				to = -1;
 				step = -1;
 			}
 
@@ -122,15 +122,17 @@ namespace tree
 				//Left-Node-Right
 				//None-Reverse
 				from = 0;
-				to = root->size() - 2; //Every node except the last one
+				to = root->children.size() - 1; //Every node except the last one
+				if (to < 0) to = 0; //do not check the empty children vector
 				step = 1;
 			}
 			else
 			{
 				//Right-Node-Left
 				//Reverse
-				from = root->size() - 1;
-				to = 1; //Every node except the first one
+				from = root->children.size()-1;
+				if (from < 0) from = 0; //do not check the empty children vector
+				to = 0; //Every node except the first one
 				step = -1;
 			}
 
@@ -148,9 +150,13 @@ namespace tree
 			if (!reversal_flag) to++; //Check the last node
 			else to--; //Check the first node
 
-			MultNode<T>* temp = searchInOrder(root->children[to], key);
+			if (!root->children.empty())
+			{
+				MultNode<T>* temp = searchInOrder(root->children[to], key);
+				return temp;
+			}
 
-			return temp;
+			return nullptr;
 		}
 		MultNode<T>* searchBreadthFirst(MultNode<T>* root, T key)
 		{
