@@ -4,7 +4,7 @@
 
 namespace linked
 {
-	template <class T>
+	template <typename T>
 	struct Node
 	{
 		T value;
@@ -18,7 +18,7 @@ namespace linked
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct List
 	{
 		int iSize;
@@ -78,7 +78,7 @@ namespace linked
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Stack: 
 		virtual List<T>
 	{
@@ -120,7 +120,7 @@ namespace linked
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Queue: 
 		virtual List<T>
 	{
@@ -161,7 +161,7 @@ namespace linked
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Deque: 
 		Stack<T>, Queue<T>
 	{

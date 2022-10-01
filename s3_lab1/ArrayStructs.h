@@ -7,7 +7,7 @@ const int GLOBAL_CONST_ARR_SIZE = 100;
 namespace array
 {
 
-	template <class T>
+	template <typename T>
 	struct List
 	{
 		T* array;
@@ -54,7 +54,7 @@ namespace array
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Stack :
 		virtual List<T>
 	{
@@ -85,7 +85,7 @@ namespace array
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Queue :
 		virtual List<T>
 	{
@@ -113,7 +113,7 @@ namespace array
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Deque :
 		Stack<T>, Queue<T>
 	{
