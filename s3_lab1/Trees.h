@@ -1,7 +1,7 @@
 #pragma once
-
 #include "LinkedStructs.h"
 
+#include <string>
 #include <vector>
 
 namespace tree
@@ -11,9 +11,11 @@ namespace tree
 	{
 		T key;
 		std::vector<MultNode<T>*> children;
+		MultNode<T>* parent;
 		MultNode(T key)
 		{
 			this->key = key;
+			this->parent = nullptr;
 		}
 		int size()
 		{
@@ -32,10 +34,13 @@ namespace tree
 		void add(MultNode<T>* root, T key)
 		{
 			MultNode<T>* to_add = new MultNode<T>(key);
-			if (root == nullptr) 
+			to_add->parent = root;
+			if (root == nullptr)
 				this->head = to_add;
 			else
+			{
 				root->children.push_back(to_add);
+			}
 			return;
 		}
 		MultNode<T>* searchPreOrder(MultNode<T>* root, T key, bool reversal_flag = false)
@@ -58,19 +63,19 @@ namespace tree
 			{
 				//Node-Right-Left
 				//Reverse
-				from = root->children.size()-1;
+				from = root->children.size() - 1;
 				to = -1;
 				step = -1;
 			}
 
 			for (from; from != to; from += step)
-					{
-						MultNode<T>* temp = searchPreOrder(root->children[from], key);
-						if (temp == nullptr)
-							continue;
-						else if (temp->key == key)
-							return temp;
-					}		
+			{
+				MultNode<T>* temp = searchPreOrder(root->children[from], key, reversal_flag);
+				if (temp == nullptr)
+					continue;
+				else if (temp->key == key)
+					return temp;
+			}
 			return nullptr;
 		}
 		MultNode<T>* searchPostOrder(MultNode<T>* root, T key, bool reversal_flag = false)
@@ -92,14 +97,14 @@ namespace tree
 			{
 				//Right-Left-Node
 				//Reverse
-				from = root->children.size()-1;
+				from = root->children.size() - 1;
 				to = -1;
 				step = -1;
 			}
 
 			for (from; from != to; from += step)
 			{
-				MultNode<T>* temp = searchPostOrder(root->children[from], key);
+				MultNode<T>* temp = searchPostOrder(root->children[from], key, reversal_flag);
 				if (temp == nullptr)
 					continue;
 				else if (temp->key == key)
@@ -130,7 +135,7 @@ namespace tree
 			{
 				//Right-Node-Left
 				//Reverse
-				from = root->children.size()-1;
+				from = root->children.size() - 1;
 				if (from < 0) from = 0; //do not check the empty children vector
 				to = 0; //Every node except the first one
 				step = -1;
@@ -138,7 +143,7 @@ namespace tree
 
 			for (from; from != to; from += step)
 			{
-				MultNode<T>* temp = searchInOrder(root->children[from], key);
+				MultNode<T>* temp = searchInOrder(root->children[from], key, reversal_flag);
 				if (temp == nullptr)
 					continue;
 				else if (temp->key == key)
@@ -152,7 +157,7 @@ namespace tree
 
 			if (!root->children.empty())
 			{
-				MultNode<T>* temp = searchInOrder(root->children[to], key);
+				MultNode<T>* temp = searchInOrder(root->children[to], key, reversal_flag);
 				return temp;
 			}
 
@@ -185,25 +190,172 @@ namespace tree
 			}
 			return nullptr;
 		}
-		void deleteRecurs(MultNode<T>* root)
+		void deleteAllChildren(MultNode<T>* root)
 		{
-			if (root == nullptr)
+			if (root == nullptr) return;
+
+			if (root->children.size() == 0)
+			{
+				delete root;
 				return;
+			}
 
-			for (MultNode<T>* iter : root->children)
-				deleteRecurs(iter);
-
+			for (int i = 0; i < root->children.size(); i++)
+			{
+				MultNode<T>* child = root->children[i];
+				deleteAllChildren(child);
+				root->children.erase(root->children.begin() + i);
+				i--;
+			}
+			return;
+		}
+		void deleteByNodeIdx(MultNode<T>* parent, int idx)
+		{
+			MultNode<T>* root = parent->children[idx];
+			deleteAllChildren(root);
+			parent->children.erase(parent->children.begin() + idx);
 			delete root;
+		}
+		void deleteByNodeKey(T key, int promote_node = 0)
+		{
+			//promote_node can be 
+			//0 - promote no node and delete all the children,
+			//-1 - "all", 
+			//n - promote the n-th node
 
-		}
-		void deleteNodeIdx(MultNode<T>* root, int idx)
-		{
-			deleteRecurs(root->children[idx]);
-		}
-		void deleteNodeKey(T key)
-		{
-			MultNode<T>* root = searchDFS(this->head, key);
-			deleteRecurs(root);
+			MultNode<T>* root = searchBreadthFirst(this->head, key);
+			if (root == nullptr) 
+				return;
+			MultNode<T>* parent = root->parent;
+
+			//delete all node children
+			if (promote_node == 0)
+			{
+				deleteAllChildren(root);
+
+				//node is the head
+				if (parent == nullptr)
+				{
+					this->head = nullptr;
+					delete root;
+					return;
+				}
+
+				//node isn't the head
+				for (int i = 0; i < parent->children.size(); i++)
+				{
+					if (parent->children[i] == root)
+					{
+						parent->children.erase(parent->children.begin() + i);
+						delete root;
+						return;
+					}
+				}
+			}
+
+			//promote only the first child
+			else if (root->children.size() == 1)
+			{
+				MultNode<T>* one_child = root->children[0];
+				one_child->parent = parent;
+
+				//node is the head
+				if (parent == nullptr)
+				{
+					this->head = one_child;
+					delete root;
+					return;
+				}
+
+				//node isn't the head
+				for (int i = 0; i < parent->children.size(); i++)
+				{
+					if (parent->children[i] == root)
+					{
+						parent->children[i] = one_child;
+						delete root;
+						return;
+					}
+				}
+			}
+
+			//promote all the children
+			else if (promote_node == -1)
+			{
+				//node is the head 
+				//make only the first child as the head
+				if (parent == nullptr)
+				{
+					MultNode<T>* one_child = root->children[0];
+					one_child->parent = parent;
+					this->head = one_child;
+					for (int i = 1; i < root->children.size(); i++)
+					{
+						MultNode<T>* temp = root->children[i];
+						temp->parent = this->head;
+						this->head->children.push_back(temp);
+					}
+					delete root;
+					return;
+				}
+
+				//node isn't the head
+				for (int i = 0; i < parent->children.size(); i++)
+				{
+					if (parent->children[i] == root)
+					{
+						for (int j = 0; j < root->children.size(); j++)
+						{
+							MultNode<T>* temp = root->children[j];
+							temp->parent = parent;
+							this->head->children.push_back(temp);
+						}
+						delete root;
+						return;
+					}
+				}
+			}
+
+			//promote only the specific child
+			else
+			{
+				MultNode<T>* child = root->children[promote_node - 1];
+				child->parent = parent;
+
+				//node is the head 
+				if (parent == nullptr)
+				{
+					this->head = child;
+					root->children.erase(root->children.begin() + promote_node - 1);
+
+					for (int i = 0; i < root->children.size(); i++)
+					{
+						MultNode<T>* temp = root->children[i];
+						temp->parent = this->head;
+						this->head->children.push_back(temp);
+					}
+					delete root;
+					return;
+				}
+
+				//node isn't the head
+				for (int i = 0; i < parent->children.size(); i++)
+				{
+					if (parent->children[i] == root)
+					{
+						parent->children[i] = child;
+						root->children.erase(root->children.begin() + promote_node - 1);
+						for (int j = 0; i < root->children.size(); j++)
+						{
+							MultNode<T>* temp = root->children[j];
+							temp->parent = child;
+							parent->children.push_back(temp);
+						}
+						delete root;
+						return;
+					}
+				}
+			}
 		}
 		void print(MultNode<T>* root)
 		{
@@ -233,7 +385,9 @@ namespace tree
 		}
 		~MultTree()
 		{
-			deleteRecurs(this->head);
+			deleteAllChildren(this->head);
+			delete this->head;
+			this->head = nullptr;
 		}
 	};
 }
