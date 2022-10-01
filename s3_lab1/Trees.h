@@ -6,7 +6,7 @@
 
 namespace tree
 {
-	template <class T>
+	template <typename T>
 	struct MultNode
 	{
 		T key;
@@ -23,7 +23,7 @@ namespace tree
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct MultTree
 	{
 		MultNode<T>* head;
@@ -388,6 +388,265 @@ namespace tree
 			deleteAllChildren(this->head);
 			delete this->head;
 			this->head = nullptr;
+		}
+	};
+
+	template <typename T>
+	struct BinNode
+	{
+		T key;
+		BinNode<T>* parent;
+		BinNode<T>* left;
+		BinNode<T>* right;
+		BinNode(T key)
+		{
+			this->key = key;
+			this->parent = nullptr;
+			this->left = nullptr;
+			this->right = nullptr;
+		}
+	};
+
+	template <typename T>
+	struct BinTree
+	{
+		BinNode<T>* head;
+		BinTree()
+		{
+			this->head = nullptr;
+		}
+		void add(BinNode<T>* root, T key)
+		{
+			BinNode<T>* to_add = new BinNode<T>(key);
+
+			if (root == nullptr)
+			{
+				if(this->head == nullptr) this->head = to_add;
+				return;
+			}
+
+			linked::Queue<BinNode<T>*> q;
+			q.pushBack(root);
+
+			while (!q.empty())
+			{
+				BinNode<T>* iter = q.top();
+				q.popTop();
+
+				if (iter->left == nullptr)
+				{
+					to_add->parent = iter;
+					iter->left = to_add;
+					return;
+				}
+				else
+					q.pushBack(iter->left);
+
+				if (iter->right == nullptr)
+				{
+					to_add->parent = iter;
+					iter->right = to_add;
+					return;
+				}
+				else
+					q.pushBack(iter->right);
+			}
+		}
+		BinNode<T>* searchPreOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+			//Pre-order
+		{
+			if (root == nullptr) return nullptr;
+			else if (root->key == key) return root;
+
+			if (!reversal_flag)
+			{
+				//Node-Left-Right
+				//None-Reverse
+				BinNode<T>* first = searchPreOrder(root->left, key, reversal_flag);
+				if (first)
+					if(first->key == key)
+						return first;
+
+				BinNode<T>* second = searchPreOrder(root->right, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			if (reversal_flag)
+			{
+				//Node-Right-Left
+				//Reverse
+				BinNode<T>* first = searchPreOrder(root->right, key, reversal_flag);
+				if (first)
+					if (first->key == key)
+						return first;
+
+				BinNode<T>* second = searchPreOrder(root->left, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			return nullptr;
+		}
+		BinNode<T>* searchPostOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+			//Post-order
+		{
+			if (root == nullptr) return nullptr;
+
+			if (!reversal_flag)
+			{
+				//Left-Right-Node
+				//None-Reverse
+				BinNode<T>* first = searchPostOrder(root->left, key, reversal_flag);
+				if (first)
+					if (first->key == key)
+						return first;
+
+				BinNode<T>* second = searchPostOrder(root->right, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			if (reversal_flag)
+			{
+				//Right-Left-Node
+				//Reverse
+				BinNode<T>* first = searchPostOrder(root->right, key, reversal_flag);
+				if (first)
+					if (first->key == key)
+						return first;
+
+				BinNode<T>* second = searchPostOrder(root->left, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			if (root->key == key)
+				return root;
+
+			return nullptr;
+		}
+		BinNode<T>* searchInOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+			//In-order
+		{
+			if (root == nullptr) return nullptr;
+
+			if (!reversal_flag)
+			{
+				//Left-Node-Right
+				//None-Reverse
+				BinNode<T>* first = searchInOrder(root->left, key, reversal_flag);
+				if (first)
+					if (first->key == key)
+						return first;
+
+				if (root->key == key)
+					return root;
+
+				BinNode<T>* second = searchInOrder(root->right, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			if (reversal_flag)
+			{
+				//Right-Left-Node
+				//Reverse
+				BinNode<T>* first = searchInOrder(root->right, key, reversal_flag);
+				if (first)
+					if (first->key == key)
+						return first;
+
+				if (root->key == key)
+					return root;
+
+				BinNode<T>* second = searchInOrder(root->left, key, reversal_flag);
+				if (second)
+					if (second->key == key)
+						return second;
+			}
+
+			return nullptr;
+		}
+		BinNode<T>* searchBreadthFirst(BinNode<T>* root, T key)
+			//breadth-first search
+		{
+			BinNode<T>* result;
+			if (root == nullptr) return nullptr;
+
+			linked::Queue<BinNode<T>*> q;
+			q.pushBack(root);
+
+			while (!q.empty())
+			{
+				BinNode<T>* iter = q.top();
+				q.popTop();
+				if (iter->key == key)
+					return iter;
+
+				if (iter->left->key == key)
+					return iter->left;
+				else
+					q.pushBack(iter->left);
+
+				if (iter->right->key == key)
+					return iter->right;
+				else
+					q.pushBack(iter->right);
+			}
+			return nullptr;
+		}
+		void deleteAllChildren(BinNode<T>* root)
+		{
+			if (root == nullptr) return;
+
+			deleteAllChildren(root->left);
+			deleteAllChildren(root->right);
+
+			if (root == this->head)
+			{
+				delete root;
+				this->head = nullptr;
+				return;
+			}
+
+			delete root;
+			root = nullptr;
+		}
+		void deleteAllChildrenByNodeKey(T key, int idx)
+		{
+			MultNode<T>* root = searchBreadthFirst(this->head, key);
+			deleteAllChildren(root);
+			delete root;
+		}
+		void print(BinNode<T>* root)
+		{
+			if (root == nullptr)
+				return;
+			linked::Queue<BinNode<T>*> queue;
+			queue.pushBack(root);
+			while (!queue.empty())
+			{
+				int n = queue.size();
+
+				// If this node has children
+				while (n > 0)
+				{
+					BinNode<T>* p = queue.top();
+					queue.popTop();
+					std::cout << p->key << " ";
+					if(p->left) queue.pushBack(p->left);
+					if(p->right) queue.pushBack(p->right);
+					n--;
+				}
+				std::cout << std::endl;
+			}
+			std::cout << "\n\n";
 		}
 	};
 }
