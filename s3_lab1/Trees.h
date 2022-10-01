@@ -601,12 +601,12 @@ namespace tree
 			}
 			return nullptr;
 		}
-		void deleteAllChildren(BinNode<T>* root)
+		void deleteByNode(BinNode<T>* root = this->head)
 		{
 			if (root == nullptr) return;
 
-			deleteAllChildren(root->left);
-			deleteAllChildren(root->right);
+			deleteByNode(root->left);
+			deleteByNode(root->right);
 
 			if (root == this->head)
 			{
@@ -615,14 +615,15 @@ namespace tree
 				return;
 			}
 
+			if (root->parent->left == root) root->parent->left = nullptr;
+			else root->parent->right = nullptr;
 			delete root;
 			root = nullptr;
 		}
-		void deleteAllChildrenByNodeKey(T key, int idx)
+		void deleteByKey(T key, BinNode<T>* root = this->head)
 		{
-			MultNode<T>* root = searchBreadthFirst(this->head, key);
-			deleteAllChildren(root);
-			delete root;
+			MultNode<T>* root = searchBreadthFirst(root, key);
+			deleteByNode(root);
 		}
 		void print(BinNode<T>* root)
 		{
@@ -647,6 +648,133 @@ namespace tree
 				std::cout << std::endl;
 			}
 			std::cout << "\n\n";
+		}
+	};
+
+	template <typename T>
+	struct BinSearchTree :
+		virtual BinTree<T>
+	{
+		void add(BinNode<T>* root, T key)
+		{
+			//first recursion root needs to be a head
+			if (this->head == nullptr)
+			{
+				BinNode<T>* to_add = new BinNode<T>(key);
+				this->head = to_add;
+				return;
+			}
+
+			if (key < root->key)
+			{
+				if (root->left == nullptr)
+				{
+					BinNode<T>* to_add = new BinNode<T>(key);
+					to_add->parent = root;
+					root->left = to_add;
+					return;
+				}
+
+				else add(root->left, key);
+			}
+
+			else if (key >= root->key)
+			{
+				if (root->right == nullptr)
+				{
+					BinNode<T>* to_add = new BinNode<T>(key);
+					to_add->parent = root;
+					root->right = to_add;
+					return;
+				}
+
+				else add(root->right, key);
+			}
+		}
+		BinNode<T>* minKeyNode(BinNode<T>* root = this->head)
+		{
+			if (root->left == nullptr)
+				return root;
+			minKeyNode(root->left);
+		}
+		void deleteByNodeKey(BinNode<T>* root, T key)
+		{
+			if (root == nullptr)
+				return;
+
+			if (key < root->key)
+				deleteByNodeKey(root->left, key);
+
+			else if (key > root->key)
+				deleteByNodeKey(root->right, key);
+
+			//key == root->key (case)
+			else 
+			{
+				// node has no child
+				if (root->left == nullptr && root->right == nullptr)
+				{
+					if (root->parent->left == root) root->parent->left = nullptr;
+					else root->parent->right = nullptr;
+					delete root;
+					root = nullptr;
+					return;
+				}
+
+				//node has only the left child
+				else if (root->left == nullptr)
+				{
+					if (!root->parent)
+					{
+						this->head = root->right;
+						root->right->parent = nullptr;
+					}
+
+					else
+					{
+						if (root->parent->left == root) root->parent->left = root->right;
+						else root->parent->right = root->right;
+					}
+
+					delete root;
+					root = nullptr;
+					return;
+				}
+
+				//node has only the right child
+				else if (root->right == nullptr) 
+				{
+					if (!root->parent)
+					{
+						this->head = root->left;
+						root->left->parent = nullptr;
+					}
+
+					else 
+					{
+						if (root->parent->left == root) root->parent->left = root->left;
+						else root->parent->right = root->left;
+					}
+
+					delete root;
+					root = nullptr;
+					return;
+				}
+
+				//node has both children
+				else
+				{
+					BinNode<T>* r_min = minKeyNode(root->right);
+					T val = r_min->key;
+					root->key = val;
+					if (r_min->parent->right == r_min) r_min->parent->right = r_min->right;
+					else r_min->parent->left = r_min->right;
+
+					delete r_min;
+					r_min = nullptr;
+					return;
+				}
+			}
 		}
 	};
 }
