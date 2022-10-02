@@ -4,7 +4,7 @@
 
 namespace linked
 {
-	template <class T>
+	template <typename T>
 	struct Node
 	{
 		T value;
@@ -18,13 +18,15 @@ namespace linked
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct List
 	{
+		int iSize;
 		Node<T>* head;
 		Node<T>* tail;
 		List()
 		{
+			this->iSize = 0;
 			this->head = nullptr;
 			this->tail = nullptr;
 		}
@@ -39,6 +41,10 @@ namespace linked
 			}
 			this->head = nullptr;
 			this->tail = nullptr;
+		}
+		int size()
+		{
+			return this->iSize;
 		}
 		bool empty()
 		{
@@ -68,10 +74,11 @@ namespace linked
 				this->tail->next = to_add;
 				this->tail = to_add;
 			}
+			this->iSize++;
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Stack: 
 		virtual List<T>
 	{
@@ -109,10 +116,11 @@ namespace linked
 				this->tail->next = nullptr;
 				delete temp;
 			}
+			this->iSize--;
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Queue: 
 		virtual List<T>
 	{
@@ -148,10 +156,12 @@ namespace linked
 				this->head->prev = nullptr;
 				delete temp;
 			}
+
+			this->iSize--;
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Deque: 
 		Stack<T>, Queue<T>
 	{
@@ -169,6 +179,8 @@ namespace linked
 				this->head->prev = to_add;
 				this->head = to_add;
 			}
+
+			this->iSize++;
 		}
 	};
 }

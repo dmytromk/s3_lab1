@@ -7,7 +7,7 @@ const int GLOBAL_CONST_ARR_SIZE = 100;
 namespace array
 {
 
-	template <class T>
+	template <typename T>
 	struct List
 	{
 		T* array;
@@ -22,6 +22,10 @@ namespace array
 		~List()
 		{
 			delete[] array;
+		}
+		int size()
+		{
+			return tail_idx + 1;
 		}
 		bool empty()
 		{
@@ -40,16 +44,17 @@ namespace array
 		void pushBack(T add)
 		{
 			if (this->overflow())
-				std::cout << "Overflow\n\n";
-			else
 			{
-				this->tail_idx++;
-				this->array[tail_idx] = add;
+				std::cout << "Overflow\n\n";
+				return;
 			}
+
+			this->tail_idx++;
+			this->array[tail_idx] = add;
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Stack :
 		virtual List<T>
 	{
@@ -80,7 +85,7 @@ namespace array
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Queue :
 		virtual List<T>
 	{
@@ -108,14 +113,17 @@ namespace array
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Deque :
 		Stack<T>, Queue<T>
 	{
 		void pushTop(T add)
 		{
 			if (this->overflow())
+			{
 				std::cout << "Overflow\n\n";
+				return;
+			}
 
 			for (int i = this->tail_idx + 1; i > 0; i--)
 				this->array[i] = this->array[i - 1];

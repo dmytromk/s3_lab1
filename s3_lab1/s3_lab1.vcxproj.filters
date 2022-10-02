@@ -29,5 +29,8 @@
     <ClInclude Include="VectorStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Trees.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

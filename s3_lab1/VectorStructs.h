@@ -5,7 +5,7 @@
 
 namespace vectorized
 {
-	template <class T>
+	template <typename T>
 	struct List
 	{
 		std::vector<T> vect;
@@ -13,17 +13,18 @@ namespace vectorized
 		{
 			this->vect = {};
 		}
-
 		~List()
 		{
 			this->vect.clear();
 		}
-
 		bool empty()
 		{
 			return (this->vect.empty());
 		}
-
+		int size()
+		{
+			return this->vect.size();
+		}
 		void print()
 		{
 			for (auto i: this->vect)
@@ -36,7 +37,7 @@ namespace vectorized
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Stack :
 		virtual List<T>
 	{
@@ -63,7 +64,7 @@ namespace vectorized
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Queue :
 		virtual List<T>
 	{
@@ -89,7 +90,7 @@ namespace vectorized
 		}
 	};
 
-	template <class T>
+	template <typename T>
 	struct Deque :
 		Stack<T>, Queue<T>
 	{
