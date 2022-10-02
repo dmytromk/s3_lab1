@@ -59,7 +59,6 @@ namespace gambling
 
 	struct DiceSet
 	{
-		int dice_amount;
 		std::vector<Dice> dices;
 		std::map<int, double> probabilityDictionary;
 		void copyDice(Dice to_copy)
@@ -68,13 +67,12 @@ namespace gambling
 			for (auto num : to_copy.weight_distribution)
 				copy.weight_distribution.push_back(num);
 			this->dices.push_back(copy);
-			this->dice_amount++;
 		}
 		void add(Dice to_copy)
 		{
 			this->dices.push_back(to_copy);
 		}
-		void countSums(int idx = 0, int key = 0, double probability = 0)
+		void countSums(int idx = 0, int key = 0, double probability = 1)
 		{
 			if (idx == dices.size())
 			{
@@ -85,7 +83,7 @@ namespace gambling
 				}
 				else
 				{
-					probabilityDictionary[key] *= probability;
+					probabilityDictionary[key] += probability;
 				}
 				return;
 			}
@@ -93,12 +91,8 @@ namespace gambling
 			// Iterate over all dice values
 			for (int i = 0; i < dices[idx].amount; ++i)
 			{
-				countSums(idx + 1, key + i + 1, dices[idx].weight_distribution[i]);
+				countSums(idx + 1, key + i + 1, probability* dices[idx].weight_distribution[i]);
 			}
-		}
-		DiceSet()
-		{
-			dice_amount = 0;
 		}
 	};
 }
