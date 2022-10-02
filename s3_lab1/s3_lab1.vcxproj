@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayStructs.h" />
+    <ClInclude Include="Dice.h" />
     <ClInclude Include="LinkedStructs.h" />
     <ClInclude Include="Trees.h" />
     <ClInclude Include="VectorStructs.h" />
