@@ -1,6 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "LinkedStructs.h"
+#include "VectorStructs.h"
+#include "ArrayStructs.h"
 
 #include "Trees.h"
 #include "doctest.h"
@@ -365,5 +367,52 @@ TEST_CASE("testing the linked structure")
 
     deque.popBack();
     CHECK(deque.head->value == deque.tail->value);
+}
 
+TEST_CASE("testing the vector structure")
+{
+    vectorized::Deque<int> deque;
+    REQUIRE(deque.empty() == true);
+    REQUIRE(deque.size() == 0);
+
+
+    deque.pushBack(1);
+    CHECK(deque.top() == 1);
+    CHECK(deque.back() == 1);
+
+    deque.pushBack(2);
+    CHECK(deque.top() == 1);
+    CHECK(deque.back() == 2);
+
+    deque.pushBack(3);
+
+    deque.popTop();
+    CHECK(deque.top() == 2);
+
+    deque.popBack();
+    CHECK(deque.back() == 2);
+}
+
+TEST_CASE("testing the array structure")
+{
+    array::Deque<int> deque;
+    REQUIRE(deque.empty() == true);
+    REQUIRE(deque.size() == 0);
+
+
+    deque.pushBack(1);
+    CHECK(deque.top() == 1);
+    CHECK(deque.back() == 1);
+
+    deque.pushBack(2);
+    CHECK(deque.top() == 1);
+    CHECK(deque.back() == 2);
+
+    deque.pushBack(3);
+
+    deque.popTop();
+    CHECK(deque.top() == 2);
+
+    deque.popBack();
+    CHECK(deque.back() == 2);
 }
