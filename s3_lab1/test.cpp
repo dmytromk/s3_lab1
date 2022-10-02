@@ -1,9 +1,12 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+#include "LinkedStructs.h"
+
 #include "Trees.h"
 #include "doctest.h"
+#include "Dice.h"
 
-
+#include <iostream>
 
 TEST_CASE("testing the general tree")
 {
@@ -291,4 +294,76 @@ TEST_CASE("testing the binary search tree")
     }
 }
 
+TEST_CASE("testing the random dice")
+{
+    const int N = 20;
+    gambling::Dice dice(N);
+    SUBCASE("testing random weight distribution")
+    {
+        dice.randomWeightDistribution();
+        double x = 0;
+        for (auto i : dice.weight_distribution)
+        {
+            x += i;
+            std::cout << i << "\n";
+        }
+        std::cout << x;
+        std::cout << "\n__________________________________\n\n";
+    }
+}
 
+TEST_CASE("testing the dice sers")
+{
+    gambling::Dice dice1(2);
+    dice1.weight_distribution = { 0.5, 0.5 };
+    CHECK(dice1.amount == 2);
+
+    gambling::Dice dice2(4);
+    dice2.weight_distribution = { 0.2, 0.4, 0.4, 0.2 };
+    CHECK(dice2.amount == 4);
+
+    gambling::DiceSet dice_set;
+    dice_set.add(dice1);
+    dice_set.add(dice2);
+    CHECK(dice_set.dices.size() == 2);
+
+    SUBCASE("sum and their probabilitues")
+    {
+        dice_set.countSums();
+        for (const auto& v : dice_set.probabilityDictionary)
+        {
+            std::cout << v.first << " has probability of " << v.second << "\n";
+        }
+    }
+}
+
+TEST_CASE("testing the linked structure")
+{
+    linked::Deque<int> deque;
+    REQUIRE(deque.empty() == true);
+    REQUIRE(deque.size() == 0);
+    REQUIRE(deque.head == nullptr);
+    REQUIRE(deque.tail == nullptr);
+
+    
+	deque.pushBack(1);
+	CHECK(deque.head->value == 1);
+	CHECK(deque.tail->value == 1);
+	deque.pushBack(2);
+	CHECK(deque.head->value == 1);
+	CHECK(deque.head->next == deque.tail);
+	CHECK(deque.tail->value == 2);
+	CHECK(deque.tail->prev == deque.head);
+
+	CHECK(deque.top() == 1);
+	CHECK(deque.back() == 2);
+
+	deque.pushBack(3);
+
+    deque.popTop();
+    CHECK(deque.head->value == 2);
+
+    deque.popBack();
+    CHECK(deque.head->value == deque.tail->value);
+
+}
