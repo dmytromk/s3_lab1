@@ -43,7 +43,7 @@ namespace tree
 			}
 			return;
 		}
-		MultNode<T>* searchPreOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+		MultNode<T>* searchPreOrder(T key, MultNode<T>* root = this->head, bool reversal_flag = false)
 			//Pre-order
 		{
 			if (root == nullptr) return nullptr;
@@ -70,7 +70,7 @@ namespace tree
 
 			for (from; from != to; from += step)
 			{
-				MultNode<T>* temp = searchPreOrder(root->children[from], key, reversal_flag);
+				MultNode<T>* temp = searchPreOrder(key, root->children[from], reversal_flag);
 				if (temp == nullptr)
 					continue;
 				else if (temp->key == key)
@@ -78,7 +78,7 @@ namespace tree
 			}
 			return nullptr;
 		}
-		MultNode<T>* searchPostOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+		MultNode<T>* searchPostOrder(T key, MultNode<T>* root = this->head, bool reversal_flag = false)
 			//Post-order
 		{
 			if (root == nullptr) return nullptr;
@@ -104,7 +104,7 @@ namespace tree
 
 			for (from; from != to; from += step)
 			{
-				MultNode<T>* temp = searchPostOrder(root->children[from], key, reversal_flag);
+				MultNode<T>* temp = searchPostOrder(key, root->children[from], reversal_flag);
 				if (temp == nullptr)
 					continue;
 				else if (temp->key == key)
@@ -115,7 +115,7 @@ namespace tree
 
 			return nullptr;
 		}
-		MultNode<T>* searchInOrder(MultNode<T>* root, T key, bool reversal_flag = false)
+		MultNode<T>* searchInOrder(T key, MultNode<T>* root = this->head, bool reversal_flag = false)
 			//In-order
 		{
 			if (root == nullptr) return nullptr;
@@ -143,7 +143,7 @@ namespace tree
 
 			for (from; from != to; from += step)
 			{
-				MultNode<T>* temp = searchInOrder(root->children[from], key, reversal_flag);
+				MultNode<T>* temp = searchInOrder(key, root->children[from], reversal_flag);
 				if (temp == nullptr)
 					continue;
 				else if (temp->key == key)
@@ -154,13 +154,13 @@ namespace tree
 
 			if (!root->children.empty())
 			{
-				MultNode<T>* temp = searchInOrder(root->children[to], key, reversal_flag);
+				MultNode<T>* temp = searchInOrder(key, root->children[to], reversal_flag);
 				return temp;
 			}
 
 			return nullptr;
 		}
-		MultNode<T>* searchBreadthFirst(MultNode<T>* root, T key)
+		MultNode<T>* searchBreadthFirst(T key, MultNode<T>* root = this->head)
 		{
 			//breadth-first search
 
@@ -218,7 +218,7 @@ namespace tree
 			//-1 - "all", 
 			//n - promote the n-th node
 
-			MultNode<T>* root = searchBreadthFirst(this->head, key);
+			MultNode<T>* root = searchBreadthFirst(key, this->head);
 			if (root == nullptr) 
 				return;
 			MultNode<T>* parent = root->parent;
@@ -420,7 +420,7 @@ namespace tree
 		{
 			this->head = nullptr;
 		}
-		void add(BinNode<T>* root, T key)
+		void add(T key, BinNode<T>* root = this->head)
 		{
 			BinNode<T>* to_add = new BinNode<T>(key);
 
@@ -457,7 +457,7 @@ namespace tree
 					q.pushBack(iter->right);
 			}
 		}
-		BinNode<T>* searchPreOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+		BinNode<T>* searchPreOrder(T key, BinNode<T>* root = this->head, bool reversal_flag = false)
 			//Pre-order
 		{
 			if (root == nullptr) return nullptr;
@@ -467,12 +467,12 @@ namespace tree
 			{
 				//Node-Left-Right
 				//None-Reverse
-				BinNode<T>* first = searchPreOrder(root->left, key, reversal_flag);
+				BinNode<T>* first = searchPreOrder(key, root->left, reversal_flag);
 				if (first)
 					if(first->key == key)
 						return first;
 
-				BinNode<T>* second = searchPreOrder(root->right, key, reversal_flag);
+				BinNode<T>* second = searchPreOrder(key, root->right, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -482,12 +482,12 @@ namespace tree
 			{
 				//Node-Right-Left
 				//Reverse
-				BinNode<T>* first = searchPreOrder(root->right, key, reversal_flag);
+				BinNode<T>* first = searchPreOrder(key, root->right, reversal_flag);
 				if (first)
 					if (first->key == key)
 						return first;
 
-				BinNode<T>* second = searchPreOrder(root->left, key, reversal_flag);
+				BinNode<T>* second = searchPreOrder(key, root->left, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -495,7 +495,7 @@ namespace tree
 
 			return nullptr;
 		}
-		BinNode<T>* searchPostOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+		BinNode<T>* searchPostOrder(T key, BinNode<T>* root = this->head, bool reversal_flag = false)
 			//Post-order
 		{
 			if (root == nullptr) return nullptr;
@@ -504,12 +504,12 @@ namespace tree
 			{
 				//Left-Right-Node
 				//None-Reverse
-				BinNode<T>* first = searchPostOrder(root->left, key, reversal_flag);
+				BinNode<T>* first = searchPostOrder(key, root->left, reversal_flag);
 				if (first)
 					if (first->key == key)
 						return first;
 
-				BinNode<T>* second = searchPostOrder(root->right, key, reversal_flag);
+				BinNode<T>* second = searchPostOrder(key, root->right, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -519,12 +519,12 @@ namespace tree
 			{
 				//Right-Left-Node
 				//Reverse
-				BinNode<T>* first = searchPostOrder(root->right, key, reversal_flag);
+				BinNode<T>* first = searchPostOrder(key, root->right, reversal_flag);
 				if (first)
 					if (first->key == key)
 						return first;
 
-				BinNode<T>* second = searchPostOrder(root->left, key, reversal_flag);
+				BinNode<T>* second = searchPostOrder(key, root->left, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -535,7 +535,7 @@ namespace tree
 
 			return nullptr;
 		}
-		BinNode<T>* searchInOrder(BinNode<T>* root, T key, bool reversal_flag = false)
+		BinNode<T>* searchInOrder(T key, BinNode<T>* root = this->head, bool reversal_flag = false)
 			//In-order
 		{
 			if (root == nullptr) return nullptr;
@@ -544,7 +544,7 @@ namespace tree
 			{
 				//Left-Node-Right
 				//None-Reverse
-				BinNode<T>* first = searchInOrder(root->left, key, reversal_flag);
+				BinNode<T>* first = searchInOrder(key, root->left, reversal_flag);
 				if (first)
 					if (first->key == key)
 						return first;
@@ -552,7 +552,7 @@ namespace tree
 				if (root->key == key)
 					return root;
 
-				BinNode<T>* second = searchInOrder(root->right, key, reversal_flag);
+				BinNode<T>* second = searchInOrder(key, root->right, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -562,7 +562,7 @@ namespace tree
 			{
 				//Right-Left-Node
 				//Reverse
-				BinNode<T>* first = searchInOrder(root->right, key, reversal_flag);
+				BinNode<T>* first = searchInOrder(key, root->right, reversal_flag);
 				if (first)
 					if (first->key == key)
 						return first;
@@ -570,7 +570,7 @@ namespace tree
 				if (root->key == key)
 					return root;
 
-				BinNode<T>* second = searchInOrder(root->left, key, reversal_flag);
+				BinNode<T>* second = searchInOrder(key, root->left, reversal_flag);
 				if (second)
 					if (second->key == key)
 						return second;
@@ -578,7 +578,7 @@ namespace tree
 
 			return nullptr;
 		}
-		BinNode<T>* searchBreadthFirst(BinNode<T>* root, T key)
+		BinNode<T>* searchBreadthFirst(T key, BinNode<T>* root = this->head)
 			//breadth-first search
 		{
 			BinNode<T>* result;
@@ -594,15 +594,21 @@ namespace tree
 				if (iter->key == key)
 					return iter;
 
-				if (iter->left->key == key)
-					return iter->left;
-				else
-					q.pushBack(iter->left);
+				if (iter->left)
+				{
+					if (iter->left->key == key)
+						return iter->left;
+					else
+						q.pushBack(iter->left);
+				}
 
-				if (iter->right->key == key)
-					return iter->right;
-				else
-					q.pushBack(iter->right);
+				if (iter->right)
+				{
+					if (iter->right->key == key)
+						return iter->right;
+					else
+						q.pushBack(iter->right);
+				}
 			}
 			return nullptr;
 		}
@@ -627,10 +633,10 @@ namespace tree
 		}
 		void deleteByKey(T key, BinNode<T>* root = this->head)
 		{
-			MultNode<T>* root = searchBreadthFirst(root, key);
-			deleteByNode(root);
+			BinNode<T>* node = searchBreadthFirst(key, root);
+			deleteByNode(node);
 		}
-		void print(BinNode<T>* root)
+		void print(BinNode<T>* root = this->head)
 		{
 			if (root == nullptr)
 				return;
@@ -660,7 +666,7 @@ namespace tree
 	struct BinSearchTree :
 		virtual BinTree<T>
 	{
-		void add(BinNode<T>* root, T key)
+		void add(T key, BinNode<T>* root = this->head)
 		{
 			//first recursion root needs to be a head
 			if (this->head == nullptr)
@@ -680,7 +686,7 @@ namespace tree
 					return;
 				}
 
-				else add(root->left, key);
+				else add(key, root->left);
 			}
 
 			else if (key >= root->key)
@@ -693,7 +699,7 @@ namespace tree
 					return;
 				}
 
-				else add(root->right, key);
+				else add(key, root->right);
 			}
 		}
 		BinNode<T>* minKeyNode(BinNode<T>* root = this->head)
@@ -702,19 +708,19 @@ namespace tree
 				return root;
 			minKeyNode(root->left);
 		}
-		void deleteByNodeKey(BinNode<T>* root, T key)
+		void deleteByNodeKey(T key, BinNode<T>* root = this->head)
 		{
 			if (root == nullptr)
 				return;
 
 			if (key < root->key)
-				deleteByNodeKey(root->left, key);
+				deleteByNodeKey(key, root->left);
 
 			else if (key > root->key)
-				deleteByNodeKey(root->right, key);
+				deleteByNodeKey(key, root->right);
 
-			//key == root->key (case)
-			else 
+			
+			else //if key == root->key 
 			{
 				// node has no child
 				if (root->left == nullptr && root->right == nullptr)
