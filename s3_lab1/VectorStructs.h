@@ -71,7 +71,7 @@ namespace vectorized
 		using List<T>::List;
 		T top()
 		{
-			if (!this->empty()) return this->vector.front();
+			if (!this->empty()) return this->vect.front();
 			else
 			{
 				std::cout << "This structure is empty.\n\n";
