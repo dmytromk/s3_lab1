@@ -152,9 +152,6 @@ namespace tree
 
 			if (root->key == key) return root;
 
-			if (!reversal_flag) to++; //Check the last node
-			else to--; //Check the first node
-
 			if (!root->children.empty())
 			{
 				MultNode<T>* temp = searchInOrder(root->children[to], key, reversal_flag);
@@ -194,11 +191,7 @@ namespace tree
 		{
 			if (root == nullptr) return;
 
-			if (root->children.size() == 0)
-			{
-				delete root;
-				return;
-			}
+			if (root->children.size() == 0) return;
 
 			for (int i = 0; i < root->children.size(); i++)
 			{
@@ -207,6 +200,7 @@ namespace tree
 				root->children.erase(root->children.begin() + i);
 				i--;
 			}
+
 			return;
 		}
 		void deleteByNodeIdx(MultNode<T>* parent, int idx)
@@ -215,6 +209,7 @@ namespace tree
 			deleteAllChildren(root);
 			parent->children.erase(parent->children.begin() + idx);
 			delete root;
+			root = nullptr;
 		}
 		void deleteByNodeKey(T key, int promote_node = 0)
 		{
@@ -238,6 +233,7 @@ namespace tree
 				{
 					this->head = nullptr;
 					delete root;
+					root = nullptr;
 					return;
 				}
 
@@ -248,6 +244,7 @@ namespace tree
 					{
 						parent->children.erase(parent->children.begin() + i);
 						delete root;
+						root = nullptr;
 						return;
 					}
 				}
@@ -264,6 +261,7 @@ namespace tree
 				{
 					this->head = one_child;
 					delete root;
+					root = nullptr;
 					return;
 				}
 
@@ -274,6 +272,7 @@ namespace tree
 					{
 						parent->children[i] = one_child;
 						delete root;
+						root = nullptr;
 						return;
 					}
 				}
@@ -296,6 +295,7 @@ namespace tree
 						this->head->children.push_back(temp);
 					}
 					delete root;
+					root = nullptr;
 					return;
 				}
 
@@ -304,13 +304,15 @@ namespace tree
 				{
 					if (parent->children[i] == root)
 					{
+						parent->children.erase(parent->children.begin() + i);
 						for (int j = 0; j < root->children.size(); j++)
 						{
 							MultNode<T>* temp = root->children[j];
 							temp->parent = parent;
-							this->head->children.push_back(temp);
+							parent->children.push_back(temp);
 						}
 						delete root;
+						root = nullptr;
 						return;
 					}
 				}
@@ -335,6 +337,7 @@ namespace tree
 						this->head->children.push_back(temp);
 					}
 					delete root;
+					root = nullptr;
 					return;
 				}
 
@@ -345,13 +348,15 @@ namespace tree
 					{
 						parent->children[i] = child;
 						root->children.erase(root->children.begin() + promote_node - 1);
-						for (int j = 0; i < root->children.size(); j++)
+
+						for (int j = 0; j < root->children.size(); j++)
 						{
 							MultNode<T>* temp = root->children[j];
 							temp->parent = child;
-							parent->children.push_back(temp);
+							child->children.push_back(temp);
 						}
 						delete root;
+						root = nullptr;
 						return;
 					}
 				}
