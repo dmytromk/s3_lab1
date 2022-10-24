@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>471</height>
+    <width>523</width>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>505</width>
-      <height>194</height>
+      <width>501</width>
+      <height>141</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="mainMenuLayout">
@@ -107,80 +107,101 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
-      <width>501</width>
-      <height>131</height>
+      <y>320</y>
+      <width>491</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="simulationLayout">
+     <item>
+      <widget class="QLabel" name="simulationLabel">
+       <property name="text">
+        <string>Simulation</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableWidget" name="simulationTable">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <row>
+        <property name="text">
+         <string>Step</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>Result</string>
+        </property>
+       </row>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="simulateButton">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>250</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Simulate</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>250</y>
+      <width>118</width>
+      <height>56</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="stepsAmountLabel">
          <property name="text">
           <string>Steps Amount</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox"/>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="simulateButton">
-         <property name="text">
-          <string>Simulate</string>
-         </property>
-        </widget>
+        <widget class="QSpinBox" name="stepsAmountBox"/>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="simulationLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLabel" name="simulationLabel">
+        <widget class="QLabel" name="seedLabel">
          <property name="text">
-          <string>Simulation</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <string>Seed</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="simulationTable">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <attribute name="verticalHeaderStretchLastSection">
-          <bool>true</bool>
-         </attribute>
-         <row>
-          <property name="text">
-           <string>Step</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Result</string>
-          </property>
-         </row>
-        </widget>
+        <widget class="QSpinBox" name="seedBox"/>
        </item>
       </layout>
      </item>
@@ -192,7 +213,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>527</width>
+     <width>523</width>
      <height>22</height>
     </rect>
    </property>
