@@ -2,27 +2,30 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "probabilitysetwindow.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    double sum;
+
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
-    void on_probabilitySetButton_clicked();
+    void on_addButton_clicked();
 
-    void on_quitButton_clicked();
+    void on_clearButton_clicked();
+
+    void on_eventTable_cellChanged(int row, int column);
 
 private:
     Ui::MainWindow *ui;
-    ProbabilitySetWindow *probSetWindow;
 };
+
 #endif // MAINWINDOW_H
