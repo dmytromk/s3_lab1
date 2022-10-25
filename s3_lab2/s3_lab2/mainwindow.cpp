@@ -17,13 +17,15 @@ MainWindow::~MainWindow()
 
 double MainWindow::get_probabilities_sum()
 {
+    int probability_col = events_set_columns(PROBABILITY);
+
     ui->eventTable->blockSignals(true);
 
     double result = 0;
     int cur_row = ui->eventTable->rowCount();
 
     for(int i = 0; i < cur_row; ++i)
-        result += ui->eventTable->item(i, 1)->text().toDouble();
+        result += ui->eventTable->item(i, probability_col)->text().toDouble();
 
     ui->eventTable->blockSignals(false);
 
@@ -32,6 +34,9 @@ double MainWindow::get_probabilities_sum()
 
 int MainWindow::get_event_by_probability(double probability)
 {
+    int event_col = events_set_columns(EVENT);
+    int probability_col = events_set_columns(PROBABILITY);
+
     ui->eventTable->blockSignals(true);
 
     double sum = this->get_probabilities_sum();
@@ -41,12 +46,11 @@ int MainWindow::get_event_by_probability(double probability)
 
     for(int i = 0; i < cur_row; ++i)
     {
-        double to_compare = ui->eventTable->item(i, 1)->text().toDouble();
-        if(to_compare/sum + cur_prob >= probability)
-            return ui->eventTable->item(i, 0)->text().toInt();
-        else cur_prob += to_compare;
+        double prob_to_compare = ui->eventTable->item(i, probability_col)->text().toDouble();
+        if((prob_to_compare + cur_prob)/sum >= probability)
+            return ui->eventTable->item(i, event_col)->text().toInt();
+        else cur_prob += prob_to_compare;
     }
-
 
     ui->eventTable->blockSignals(false);
 
@@ -55,21 +59,34 @@ int MainWindow::get_event_by_probability(double probability)
 
 void MainWindow::on_addButton_clicked()
 {
-    ui->eventTable->blockSignals(true);
+    ui->eventTable->setSortingEnabled(false);
+
+    int event_col = events_set_columns(EVENT);
+    int name_col = events_set_columns(NAME);
+    int probability_col = events_set_columns(PROBABILITY);
 
     int event = ui->eventInpuBox->value();
+    QString name = ui->eventNameLine->text();
     double probability = ui->probabilityInputBox->value();
+
     int cur_row = ui->eventTable->rowCount();
 
     for(int i = 0; i < cur_row; ++i)
     {
-        if(ui->eventTable->item(i, 0)->text() == QString::number(event))
+        if(ui->eventTable->item(i, EVENT)->text() == QString::number(event))
         {
             //we have found the same event
-            double changed = ui->eventTable->item(i, 1)->text().toDouble() + probability;
-            QTableWidgetItem* item = new QTableWidgetItem;
-            item->setData(Qt::EditRole, changed);
-            ui->eventTable->setItem(i, 1, item);
+            double changed_probability = ui->eventTable->item(i, probability_col)->text().toDouble() + probability;
+            QTableWidgetItem* itemNewEvent = new QTableWidgetItem;
+            itemNewEvent->setData(Qt::EditRole, changed_probability);
+            ui->eventTable->setItem(i, probability_col, itemNewEvent);
+
+            QTableWidgetItem* itemNewName = new QTableWidgetItem;
+            itemNewName->setData(Qt::EditRole, name);
+            ui->eventTable->setItem(i, name_col, itemNewName);
+
+            ui->eventTable->setSortingEnabled(true);
+
             return;
         }
     }
@@ -79,15 +96,17 @@ void MainWindow::on_addButton_clicked()
 
     QTableWidgetItem* itemEvent = new QTableWidgetItem;
     itemEvent->setData(Qt::EditRole, event);
-    ui->eventTable->setItem(cur_row, 0, itemEvent);
+    ui->eventTable->setItem(cur_row, event_col, itemEvent);
+
+    QTableWidgetItem* itemName = new QTableWidgetItem;
+    itemName->setData(Qt::EditRole, name);
+    ui->eventTable->setItem(cur_row, name_col, itemName);
 
     QTableWidgetItem* itemProbability = new QTableWidgetItem;
     itemProbability->setData(Qt::EditRole, probability);
-    ui->eventTable->setItem(cur_row, 1, itemProbability);
+    ui->eventTable->setItem(cur_row, probability_col, itemProbability);
 
-    ui->eventTable->sortItems(0, Qt::AscendingOrder);
-
-    ui->eventTable->blockSignals(false);
+    ui->eventTable->setSortingEnabled(true);
 }
 
 void MainWindow::on_clearButton_clicked()
@@ -96,18 +115,11 @@ void MainWindow::on_clearButton_clicked()
     ui->eventTable->clearContents();
 }
 
-
-void MainWindow::on_eventTable_cellChanged(int row, int column)
-{
-    if(column!=0)
-        return;
-
-    ui->eventTable->sortItems(0, Qt::AscendingOrder);
-}
-
-
 void MainWindow::on_simulateButton_clicked()
 {
+    int step_col = simulation_columns(STEP);
+    int result_col = simulation_columns(RESULT);
+
     const int RAND_CONST = 1;
     const int COEFICIENT = 5555;
 
@@ -119,9 +131,7 @@ void MainWindow::on_simulateButton_clicked()
     std::default_random_engine generator{static_cast<unsigned int>((RAND_CONST+seed)*COEFICIENT)};
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-    srand(RAND_CONST+seed);
-
-    ui->simulationTable->setColumnCount(0);
+    ui->simulationTable->setRowCount(0);
     ui->simulationTable->clearContents();
 
     for(int i = 1; i <= stepsAmount; i++)
@@ -129,19 +139,17 @@ void MainWindow::on_simulateButton_clicked()
         double probability = distribution(generator);
         int event = this->get_event_by_probability(probability);
 
-        ui->simulationTable->insertColumn(i-1);
+        ui->simulationTable->insertRow(i-1);
 
         QTableWidgetItem* itemStep = new QTableWidgetItem;
         itemStep->setTextAlignment(Qt::AlignCenter);
         itemStep->setData(Qt::EditRole, i);
-        ui->simulationTable->setItem(0, i-1, itemStep);
+        ui->simulationTable->setItem(i-1, step_col, itemStep);
 
         QTableWidgetItem* itemResult = new QTableWidgetItem;
         itemResult->setTextAlignment(Qt::AlignCenter);
         itemResult->setData(Qt::EditRole, event);
-        ui->simulationTable->setItem(1, i-1, itemResult);
+        ui->simulationTable->setItem(i-1, result_col, itemResult);
     }
-
-    ui->simulationTable->blockSignals(false);
 }
 

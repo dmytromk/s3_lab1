@@ -11,6 +11,19 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    enum events_set_columns
+    {
+        EVENT,
+        NAME,
+        PROBABILITY
+    };
+
+    enum simulation_columns
+    {
+        STEP,
+        RESULT
+    };
+
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -24,8 +37,6 @@ private slots:
     void on_addButton_clicked();
 
     void on_clearButton_clicked();
-
-    void on_eventTable_cellChanged(int row, int column);
 
     void on_simulateButton_clicked();
 
