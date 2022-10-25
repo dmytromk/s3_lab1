@@ -40,6 +40,10 @@ private slots:
 
     void on_simulateButton_clicked();
 
+    void on_randomizeSeedButton_clicked();
+
+    void on_exportCSVButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

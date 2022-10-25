@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "QFileDialog"
+
 #include <random>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -151,5 +153,31 @@ void MainWindow::on_simulateButton_clicked()
         itemResult->setData(Qt::EditRole, event);
         ui->simulationTable->setItem(i-1, result_col, itemResult);
     }
+}
+
+void MainWindow::on_randomizeSeedButton_clicked()
+{
+    int seed = rand();
+    ui->seedBox->setValue(seed/10);
+}
+
+void MainWindow::on_exportCSVButton_clicked()
+{
+    int step_col = simulation_columns(STEP);
+    int result_col = simulation_columns(RESULT);
+
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home",
+                                                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QFile data(dir+"/simulation.csv");
+    data.open(QFile::WriteOnly | QFile::Truncate |QIODevice::Append);
+    QTextStream output(&data);
+
+    int cur_row = ui->simulationTable->rowCount();
+
+    output << "Step" << "," << "Result"<< '\n';
+    for(int i=0;i<cur_row; i++) {
+        output << ui->simulationTable->item(i, step_col)->text() << "," << ui->simulationTable->item(i, result_col)->text() << '\n';
+    }
+    data.close();
 }
 

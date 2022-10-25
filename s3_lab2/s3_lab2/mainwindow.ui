@@ -48,7 +48,7 @@
              <item>
               <widget class="QLabel" name="labelEventName">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Event Name</string>
                </property>
               </widget>
              </item>
@@ -160,9 +160,9 @@
              <item>
               <layout class="QHBoxLayout" name="seedLayout">
                <item>
-                <widget class="QCheckBox" name="randomSeedCheckBox">
+                <widget class="QPushButton" name="randomizeSeedButton">
                  <property name="text">
-                  <string>Random seed</string>
+                  <string>Randomize seed</string>
                  </property>
                 </widget>
                </item>
@@ -253,7 +253,7 @@
        <item>
         <layout class="QHBoxLayout" name="simulationButtonLayout">
          <item>
-          <widget class="QPushButton" name="exportButton">
+          <widget class="QPushButton" name="exportCSVButton">
            <property name="text">
             <string>Export to CSV</string>
            </property>
