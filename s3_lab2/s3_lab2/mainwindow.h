@@ -52,6 +52,8 @@ private slots:
 
     void on_statisticsButton_clicked();
 
+    void on_deleteSelectedButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -96,6 +96,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="deleteSelectedButton">
+              <property name="text">
+               <string>Delete selected</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -107,6 +114,12 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="sortingEnabled">
            <bool>true</bool>
@@ -208,6 +221,12 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::ExtendedSelection</enum>
             </property>
             <attribute name="horizontalHeaderVisible">
              <bool>true</bool>

@@ -247,3 +247,10 @@ void MainWindow::on_statisticsButton_clicked()
     statisticWindow->show();
 }
 
+
+void MainWindow::on_deleteSelectedButton_clicked()
+{
+    int cur_row = ui->eventTable->currentRow();
+    ui->eventTable->removeRow(cur_row);
+}
+
