@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "statisticwindow.h"
+
 #include "QFileDialog"
 
 #include <random>
+#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,12 +37,10 @@ double MainWindow::get_probabilities_sum()
     return result;
 }
 
-int MainWindow::get_event_by_probability(double probability)
+double MainWindow::get_event_by_probability(double probability)
 {
     int event_col = events_set_columns(EVENT);
     int probability_col = events_set_columns(PROBABILITY);
-
-    ui->eventTable->blockSignals(true);
 
     double sum = this->get_probabilities_sum();
     double cur_prob = 0;
@@ -50,13 +51,51 @@ int MainWindow::get_event_by_probability(double probability)
     {
         double prob_to_compare = ui->eventTable->item(i, probability_col)->text().toDouble();
         if((prob_to_compare + cur_prob)/sum >= probability)
+        {
             return ui->eventTable->item(i, event_col)->text().toInt();
+        }
         else cur_prob += prob_to_compare;
     }
 
-    ui->eventTable->blockSignals(false);
+    return std::nan("");
+}
 
-    return -1;
+double MainWindow::get_moment(int power)
+{
+    int event_col = events_set_columns(EVENT);
+    int probability_col = events_set_columns(PROBABILITY);
+
+    double probability_sum = get_probabilities_sum();
+    double res = 0;
+
+    int cur_row = ui->eventTable->rowCount();
+    for(int i = 0; i < cur_row; ++i)
+        res += pow(ui->eventTable->item(i, event_col)->text().toDouble(), power) *
+                ui->eventTable->item(i, probability_col)->text().toDouble()/probability_sum;
+
+    return res;
+}
+
+double MainWindow::get_variance()
+{
+    double res = get_moment(2) - pow(get_moment(1),2);
+    return res;
+}
+
+double MainWindow::get_average_random_var()
+{
+    int result_col = simulation_columns(RESULT);
+
+    int cur_row = ui->simulationTable->rowCount();
+    int i = 0;
+    double res = 0;
+
+    for(; i<cur_row; i++)
+        res += ui->simulationTable->item(i, result_col)->text().toDouble();
+
+    res /= i;
+
+    return res;
 }
 
 void MainWindow::on_addButton_clicked()
@@ -93,7 +132,6 @@ void MainWindow::on_addButton_clicked()
         }
     }
 
-
     ui->eventTable->insertRow(cur_row);
 
     QTableWidgetItem* itemEvent = new QTableWidgetItem;
@@ -122,10 +160,13 @@ void MainWindow::on_simulateButton_clicked()
     int step_col = simulation_columns(STEP);
     int result_col = simulation_columns(RESULT);
 
+    int event_col = events_set_columns(EVENT);
+
+    ui->simulationTable->setSortingEnabled(false);
+    ui->eventTable->sortItems(event_col, Qt::AscendingOrder);
+
     const int RAND_CONST = 1;
     const int COEFICIENT = 5555;
-
-    ui->simulationTable->blockSignals(true);
 
     int stepsAmount = ui->stepsAmountBox->value();
     int seed = ui->seedBox->value();
@@ -139,7 +180,7 @@ void MainWindow::on_simulateButton_clicked()
     for(int i = 1; i <= stepsAmount; i++)
     {
         double probability = distribution(generator);
-        int event = this->get_event_by_probability(probability);
+        double event = this->get_event_by_probability(probability);
 
         ui->simulationTable->insertRow(i-1);
 
@@ -153,6 +194,8 @@ void MainWindow::on_simulateButton_clicked()
         itemResult->setData(Qt::EditRole, event);
         ui->simulationTable->setItem(i-1, result_col, itemResult);
     }
+
+    ui->simulationTable->setSortingEnabled(true);
 }
 
 void MainWindow::on_randomizeSeedButton_clicked()
@@ -163,6 +206,8 @@ void MainWindow::on_randomizeSeedButton_clicked()
 
 void MainWindow::on_exportCSVButton_clicked()
 {
+    ui->simulationTable->setSortingEnabled(false);
+
     int step_col = simulation_columns(STEP);
     int result_col = simulation_columns(RESULT);
 
@@ -179,5 +224,26 @@ void MainWindow::on_exportCSVButton_clicked()
         output << ui->simulationTable->item(i, step_col)->text() << "," << ui->simulationTable->item(i, result_col)->text() << '\n';
     }
     data.close();
+
+    ui->simulationTable->setSortingEnabled(true);
+}
+
+void MainWindow::on_statisticsButton_clicked()
+{
+    double expected_value = get_moment(1);
+    double variance = get_variance();
+    double average_value = get_average_random_var();
+
+    StatisticWindow* statisticWindow = new StatisticWindow;
+
+    QString str_expected_value =QString::number(expected_value);
+    QString str_variance = QString::number(variance);
+    QString str_average_value = QString::number(average_value);
+
+    statisticWindow->set_expected_value(str_expected_value);
+    statisticWindow->set_variance(str_variance);
+    statisticWindow->set_average_value(str_average_value);
+
+    statisticWindow->show();
 }
 

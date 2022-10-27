@@ -32,7 +32,13 @@ public:
 private slots:
     double get_probabilities_sum();
 
-    int get_event_by_probability(double probability);
+    double get_event_by_probability(double probability);
+
+    double get_moment(int power);
+
+    double get_variance();
+
+    double get_average_random_var();
 
     void on_addButton_clicked();
 
@@ -43,6 +49,8 @@ private slots:
     void on_randomizeSeedButton_clicked();
 
     void on_exportCSVButton_clicked();
+
+    void on_statisticsButton_clicked();
 
 private:
     Ui::MainWindow *ui;

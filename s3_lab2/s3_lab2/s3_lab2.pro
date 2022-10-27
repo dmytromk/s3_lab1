@@ -10,13 +10,16 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    statisticwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    statisticwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    statisticwindow.ui
 
 RC_ICONS = images/dices.ico
 
