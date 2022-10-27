@@ -21,3 +21,7 @@
 
 # s3_lab2 (C++)
 ## Task №4
+#### Additional:
+- Subtask 4
+- Subtask 5
+- Subtask 6
