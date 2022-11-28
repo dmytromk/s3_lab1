@@ -36,6 +36,7 @@ extents = Vector2( 64, 32 )
 1/z_index = 0
 
 [node name="platform" type="RigidBody2D"]
+position = Vector2( 0, 28 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
