@@ -1,3 +1,14 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/platform.tscn" type="PackedScene" id=2]
 
 [node name="world" type="Node2D"]
+
+[node name="player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 88, 173 )
+
+[node name="plaform_generator" type="Node2D" parent="."]
+
+[node name="platform" parent="plaform_generator" instance=ExtResource( 2 )]
+position = Vector2( 89, 219 )
