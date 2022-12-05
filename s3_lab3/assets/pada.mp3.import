@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/pada.mp3-83c6f859b96d602394e699c9a865285f.mp3str"
+
+[deps]
+
+source_file="res://assets/pada.mp3"
+dest_files=[ "res://.import/pada.mp3-83c6f859b96d602394e699c9a865285f.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/monsterblizu.mp3-54c03ce3aedc4d50ee63ad5a237fb969.mp3str"
+
+[deps]
+
+source_file="res://assets/monsterblizu.mp3"
+dest_files=[ "res://.import/monsterblizu.mp3-54c03ce3aedc4d50ee63ad5a237fb969.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

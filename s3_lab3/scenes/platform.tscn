@@ -38,6 +38,8 @@ extents = Vector2( 64, 32.2105 )
 
 [node name="platform" type="RigidBody2D" groups=["platform"]]
 position = Vector2( 0, 28 )
+collision_layer = 2
+collision_mask = 0
 mode = 1
 contacts_reported = 5
 contact_monitor = true
@@ -57,3 +59,5 @@ cell_size = Vector2( 63, 64 )
 cell_tile_origin = 1
 format = 1
 tile_data = PoolIntArray( 65535, 0, 0, 0, 1, 0 )
+
+[connection signal="body_entered" from="." to="." method="_on_platform_body_entered"]
