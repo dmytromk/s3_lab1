@@ -1,0 +1,71 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/Kenney Mini Square Mono.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/main_menu.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 14
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.172549, 0.615686, 0.552941, 1 )
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+corner_detail = 9
+
+[node name="main_menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -104, 84 )
+custom_constants/separation = 21
+alignment = 1
+
+[node name="title" type="Label" parent="VBoxContainer"]
+margin_top = 79.0
+margin_right = 180.0
+margin_bottom = 99.0
+custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Doodle Jump"
+align = 1
+
+[node name="start" type="Button" parent="VBoxContainer"]
+margin_top = 120.0
+margin_right = 180.0
+margin_bottom = 138.0
+custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
+custom_fonts/font = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+text = "START"
+
+[node name="exit" type="Button" parent="VBoxContainer"]
+margin_top = 159.0
+margin_right = 180.0
+margin_bottom = 177.0
+custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
+custom_fonts/font = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+text = "Exit"
+
+[node name="highscore" type="Label" parent="VBoxContainer"]
+margin_top = 198.0
+margin_right = 180.0
+margin_bottom = 241.0
+custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Highscore
+"
+align = 1
+
+[connection signal="pressed" from="VBoxContainer/start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/exit" to="." method="_on_exit_pressed"]

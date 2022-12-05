@@ -11,8 +11,12 @@ config_version=4
 [application]
 
 config/name="s3_lab3"
-run/main_scene="res://scenes/world.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://scenes/global.gd"
 
 [display]
 
