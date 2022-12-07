@@ -10,9 +10,6 @@ func _ready():
 func _on_start_pressed():
 	get_tree().change_scene("res://scenes/world.tscn")
 
-func _on_options_pressed():
-	pass # Replace with function body.
-
 func _on_exit_pressed():
 	get_tree().quit()
 	

@@ -10,9 +10,9 @@ var jump_time_to_descent : float = 0.9 / Global.insane_mode
 
 var speed_x : float = 60 * Global.insane_mode
 
-var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
-var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
-var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
+var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 * Global.insane_mode
+var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0 * Global.insane_mode
+var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0 * Global.insane_mode
 
 var game_over = false
 var left_border = 0
@@ -22,7 +22,7 @@ func _ready():
   right_border = get_viewport_rect().size.x
 
 func _physics_process(delta):
-	velocity.y += fall_gravity * delta
+	velocity.y += get_gravity() * delta
 	
 	if Input.is_action_pressed("move_left"):
 		velocity.x -= speed_x
@@ -46,9 +46,9 @@ func _physics_process(delta):
 		position.x = right_border
 	elif position.x > right_border:
 		position.x = left_border
-
-func jump():
-	velocity.y = jump_velocity
+		
+func get_gravity() -> float:
+	return jump_gravity if velocity.y < 0.0 else fall_gravity
 
 func die():
 	AudioStreamManager.play("res://assets/pada.mp3")
