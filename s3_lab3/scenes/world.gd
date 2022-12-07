@@ -8,34 +8,44 @@ onready var platform_generator = $platform_generator
 onready var intital_camera_position_y = $Camera2D.position.y
 onready var intital_platform_position_y = $platform_generator/platform.position.y - 30
 
+var last_platform_is_enemy = false
+var paused = false
+
 var score: = 0
 var highscore = Global.read_savegame()
 
 export(Array, PackedScene) var platform_scene
 
 func world_generation(plaforms_amount):
-	var last_platform_is_enemy = false
 	for i in plaforms_amount:
-		intital_platform_position_y -= rand_range(50, rand_range(70, min(120, 70 + score/100)))
+		intital_platform_position_y -= rand_range(45, 100)
 		
 		var new_platform
 		var platform_type = randi()%10 # 0 - booster, else - standatd
 		
 		if platform_type == 0:
 			new_platform = platform_scene[1].instance() as RigidBody2D
+			last_platform_is_enemy = false
+			
 		elif platform_type >= 1 and platform_type <= 2 and last_platform_is_enemy == false and score > 200:
-			new_platform = platform_scene[2].instance() as StaticBody2D
+			new_platform = platform_scene[3].instance() as StaticBody2D
 			last_platform_is_enemy = true
+			
+		elif platform_type >= 3 and platform_type <= 5 and score > -200:
+			new_platform = platform_scene[2].instance() as RigidBody2D
+			last_platform_is_enemy = false
+			
 		else:
 			new_platform = platform_scene[0].instance() as RigidBody2D
+			last_platform_is_enemy = false
 			
 		if new_platform != null:
-			new_platform.position = Vector2(rand_range(20, 160), intital_platform_position_y)
+			new_platform.position = Vector2(rand_range(30, 150), intital_platform_position_y)
 			platform_generator.call_deferred("add_child", new_platform)
 	
 func _ready():
 	randomize()
-	world_generation(20)
+	world_generation(10)
 
 func _physics_process(delta):
 	var pla = player.position.y 
@@ -61,3 +71,14 @@ func _on_platform_eraser_body_entered(body):
 func score_update():
 	score = intital_camera_position_y - camera.position.y
 	score_label.text = "Score: " + str(int(score))
+
+
+func _on_pause_pressed():
+	if paused == false:
+		paused = true
+		get_tree().paused = true
+		$Camera2D/pause_label.visible = true
+	else:
+		paused = false
+		get_tree().paused = false
+		$Camera2D/pause_label.visible = false

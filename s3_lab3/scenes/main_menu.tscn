@@ -31,41 +31,66 @@ custom_constants/separation = 21
 alignment = 1
 
 [node name="title" type="Label" parent="VBoxContainer"]
-margin_top = 79.0
+margin_top = 56.0
 margin_right = 180.0
-margin_bottom = 99.0
+margin_bottom = 76.0
 custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "Doodle Jump"
 align = 1
 
 [node name="start" type="Button" parent="VBoxContainer"]
-margin_top = 120.0
+margin_top = 97.0
 margin_right = 180.0
-margin_bottom = 138.0
+margin_bottom = 115.0
 custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
 custom_fonts/font = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 text = "START"
 
 [node name="exit" type="Button" parent="VBoxContainer"]
-margin_top = 159.0
+margin_top = 136.0
 margin_right = 180.0
-margin_bottom = 177.0
+margin_bottom = 154.0
 custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
 custom_fonts/font = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 text = "Exit"
 
-[node name="highscore" type="Label" parent="VBoxContainer"]
-margin_top = 198.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 175.0
 margin_right = 180.0
-margin_bottom = 241.0
+margin_bottom = 199.0
+alignment = 1
+
+[node name="insane_mode" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 10.0
+margin_top = 2.0
+margin_right = 142.0
+margin_bottom = 22.0
+custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "insane mode"
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+margin_left = 146.0
+margin_right = 170.0
+margin_bottom = 24.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+align = 1
+icon_align = 1
+
+[node name="highscore" type="Label" parent="VBoxContainer"]
+margin_top = 220.0
+margin_right = 180.0
+margin_bottom = 263.0
 custom_colors/font_color = Color( 0.615686, 0.12549, 0.12549, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "Highscore
 "
 align = 1
 
+[connection signal="ready" from="." to="." method="_on_main_menu_ready"]
 [connection signal="pressed" from="VBoxContainer/start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit" to="." method="_on_exit_pressed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]

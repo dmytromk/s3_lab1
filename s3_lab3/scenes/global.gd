@@ -1,5 +1,7 @@
 extends Node
 
+var insane_mode = 1 # 1 - is normal mode, anything else - is insane!
+
 var savegame = File.new() #file
 var save_path = "user://savegame.save" #place of the file
 var save_data = {"highscore": 0} #variable to store data
